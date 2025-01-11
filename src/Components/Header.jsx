@@ -1,6 +1,26 @@
 import React from "react";
-
+import { Navigate, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { auth } from "../../firebase";
+import {
+  signOut,
+} from "firebase/auth";
+import { removeUser } from "../utils/UserSlice";
 const Header = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const user = useSelector(state =>state.user);
+   const handleSignOut = async () => {
+      try {
+        await signOut(auth);
+        dispatch(removeUser());
+        alert("You have been signed out.");
+        navigate('/');
+      } catch (error) {
+        alert(`Sign-out failed: ${error.message}`);
+      }
+    };
+
   return (
     <div className="absolute w-full bg-gradient-to-b from-black">
       <div className="flex justify-center lg:justify-start"> {/* Responsive alignment */}
@@ -10,6 +30,13 @@ const Header = () => {
           alt="Netflix Logo"
         />
       </div>
+     {
+      user &&
+      <div>
+        <p>{user.displayName}</p>
+        <button onClick={handleSignOut}>Logout</button>
+      </div>
+     }
     </div>
   );
 };

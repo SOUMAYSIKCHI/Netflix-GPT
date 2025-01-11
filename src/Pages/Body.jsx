@@ -1,17 +1,19 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState,useEffect } from "react";
 import Header from "../Components/Header";
 import FreqItem from "../Components/FreqItem";
 import { freqdata } from "../utils/freqdata";
 import { validate } from "../utils/validate";
 import { auth, googleProvider } from "../../firebase";
+import {onAuthStateChanged,updateProfile  } from "firebase/auth";
+import { useDispatch } from 'react-redux';
+import {addUser,removeUser} from "../utils/UserSlice"
 import {
   signInWithPopup,
-  signOut,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword 
 } from "firebase/auth";
 import { toast } from "react-hot-toast";
-import { FaGoogle } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 export const Body = () => {
   const [signUp, setSignUp] = useState(false);
@@ -20,6 +22,24 @@ export const Body = () => {
   const firstname = useRef(null);
   const [showIndex, setShowIndex] = useState(null);
   const [validatestmt, setValidateStmt] = useState(null);
+  const dispatch =  useDispatch();
+  const navigate = useNavigate();
+  
+  useEffect(()=>{
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in, see docs for a list of available properties
+        const {uid,email,displayName}= user;
+        dispatch(addUser({uid,email,displayName}));
+        navigate(`/browse`);
+        // ...
+      } else {
+        // User is signed out
+        // ...
+        dispatch(removeUser());
+      }
+    });
+  },[])
 
   function setShowIndex1(index) {
     if (showIndex === index) {
@@ -39,14 +59,7 @@ export const Body = () => {
     }
   };
 
-  const handleSignOut = async () => {
-    try {
-      await signOut(auth);
-      alert("You have been signed out.");
-    } catch (error) {
-      alert(`Sign-out failed: ${error.message}`);
-    }
-  };
+ 
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
@@ -71,6 +84,19 @@ export const Body = () => {
         .then((userCredential) => {
           // Signed up
           const user = userCredential.user;
+          updateProfile(user, {
+            displayName: firstname.current.value
+          }).then(() => {
+            const {uid,email,displayName}= user;
+            dispatch(addUser({uid,email,displayName}));
+            // Profile updated!
+            // ...
+
+          }).catch((error) => {
+            // An error occurred
+            // ...
+          });
+          
           console.log(user);
           toast.success("Signup Success");
           // ...
