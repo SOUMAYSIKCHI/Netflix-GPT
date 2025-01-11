@@ -4,10 +4,14 @@ import FreqItem from "../Components/FreqItem";
 import { freqdata } from "../utils/freqdata";
 import { validate } from "../utils/validate";
 import { auth, googleProvider } from "../../firebase";
-import { signInWithPopup, signOut } from "firebase/auth";
-import {toast} from 'react-hot-toast';
+import {
+  signInWithPopup,
+  signOut,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword 
+} from "firebase/auth";
+import { toast } from "react-hot-toast";
 import { FaGoogle } from "react-icons/fa";
-
 
 export const Body = () => {
   const [signUp, setSignUp] = useState(false);
@@ -16,6 +20,14 @@ export const Body = () => {
   const firstname = useRef(null);
   const [showIndex, setShowIndex] = useState(null);
   const [validatestmt, setValidateStmt] = useState(null);
+
+  function setShowIndex1(index) {
+    if (showIndex === index) {
+      setShowIndex(null);
+    } else {
+      setShowIndex(index);
+    }
+  }
 
   const handleSignIn = async () => {
     try {
@@ -38,11 +50,56 @@ export const Body = () => {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    const validationMessage = validate(email.current.value, password.current.value);
+    const validationMessage = validate(
+      email.current.value,
+      password.current.value
+    );
     setValidateStmt(validationMessage);
 
-    if (!validationMessage) {
-      alert(signUp ? "Account created successfully!" : "Signed in successfully!");
+    if (validationMessage !== null) {
+      toast.error(validationMessage);
+      return;
+    }
+
+    if (signUp) {
+      // signup login
+      createUserWithEmailAndPassword(
+        auth,
+        email.current.value,
+        password.current.value
+      )
+        .then((userCredential) => {
+          // Signed up
+          const user = userCredential.user;
+          console.log(user);
+          toast.success("Signup Success");
+          // ...
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          setValidateStmt(errorMessage);
+          toast.error(errorMessage);
+          // ..
+        });
+    } else {
+      //sign in login
+      signInWithEmailAndPassword(
+        auth,
+        email.current.value,
+        password.current.value
+      )
+        .then((userCredential) => {
+          // Signed in
+          const user = userCredential.user;
+          toast.success("Login Success", user);
+          // ...
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          toast.error("Wrong Credentials entered");
+        });
     }
   };
 
@@ -59,7 +116,7 @@ export const Body = () => {
       </div>
 
       {/* Form */}
-      <div className="absolute text-white w-full top-[140px] opacity-90">
+      <div className="absolute text-white w-full top-[102px] opacity-90">
         <form
           className="mx-8 sm:w-9/12 md:w-3/4 lg:w-4/12 font-Segoe UI Symbol bg-black rounded-md lg:px-14 md:px-14 py-10 lg:mx-auto md:mx-auto px-10"
           onSubmit={handleFormSubmit}
@@ -108,10 +165,8 @@ export const Body = () => {
             onClick={handleSignIn}
             className="mt-4 px-2 py-2 text-[20px] w-full rounded-md border-white border-2 text-white"
           >
-            Sign In with Google  
+            Sign In with Google
           </button>
-
-         
 
           <p
             onClick={() => setSignUp(!signUp)}
@@ -134,7 +189,7 @@ export const Body = () => {
               key={ele.title}
               ele={ele}
               showItems={index === showIndex}
-              setShowIndex1={() => setShowIndex(index)}
+              setShowIndex1={() => setShowIndex1(index)}
             />
           ))}
         </div>
