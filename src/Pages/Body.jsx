@@ -3,9 +3,10 @@ import Header from "../Components/Header";
 import FreqItem from "../Components/FreqItem";
 import { freqdata } from "../utils/freqdata";
 import { validate } from "../utils/validate";
+import lang from "../utils/LangConst"
 import { auth, googleProvider } from "../../firebase";
 import {onAuthStateChanged,updateProfile  } from "firebase/auth";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {addUser,removeUser} from "../utils/UserSlice"
 import {
   signInWithPopup,
@@ -24,6 +25,7 @@ export const Body = () => {
   const [validatestmt, setValidateStmt] = useState(null);
   const dispatch =  useDispatch();
   const navigate = useNavigate();
+  const selectedLang = useSelector(state => state.config.language);
   
   useEffect(()=>{
     onAuthStateChanged(auth, (user) => {
@@ -148,7 +150,7 @@ export const Body = () => {
           onSubmit={handleFormSubmit}
         >
           <h1 className="font-bold text-xl lg:text-3xl md:text-3xl">
-            {signUp ? "Sign Up" : "Sign In"}
+            {signUp ?  lang[selectedLang].SignUp : lang[selectedLang].SignIn} 
           </h1>
           {signUp && (
             <input
@@ -156,7 +158,7 @@ export const Body = () => {
               type="text"
               name="firstname"
               ref={firstname}
-              placeholder="Name"
+              placeholder= {lang[selectedLang].NamePlaceholder}
             />
           )}
           <input
@@ -164,14 +166,14 @@ export const Body = () => {
             type="email"
             name="email"
             ref={email}
-            placeholder="Email"
+            placeholder={lang[selectedLang].EmailPlaceholder}
           />
           <input
             className="mt-6 px-4 py-2 text-[20px] w-full rounded-sm bg-black opacity-90 border-2 border-gray-700"
             type="password"
             name="password"
             ref={password}
-            placeholder="Password"
+            placeholder={lang[selectedLang].PasswordPlaceholder}
           />
 
           <p className="mt-6 px-4 py-2 text-[20px] text-red-500">
@@ -182,7 +184,7 @@ export const Body = () => {
             type="submit"
             className="mt-6 px-4 py-2 text-[20px] w-full rounded-md bg-red-700 opacity-100"
           >
-            {signUp ? "Sign Up" : "Sign In"}
+            {signUp ? lang[selectedLang].SignUp : lang[selectedLang].SignIn}
           </button>
           <p className="w-full text-center mt-4 font-bold text-xl">Or</p>
 
@@ -191,16 +193,16 @@ export const Body = () => {
             onClick={handleSignIn}
             className="mt-4 px-2 py-2 text-[20px] w-full rounded-md border-white border-2 text-white"
           >
-            Sign In with Google
+            { lang[selectedLang].SignInwithGoogle}
           </button>
 
           <p
             onClick={() => setSignUp(!signUp)}
             className="mt-6 text-xl font-bold cursor-pointer"
           >
-            {signUp ? "Already have an Account?" : "New to Netflix?"}{" "}
+            {signUp ? lang[selectedLang].Already_have_an_Account : lang[selectedLang].New_to_Netflix}{" "}
             <span className="text-red-800">
-              {signUp ? "Sign in now." : "Sign up now."}
+              {signUp ? lang[selectedLang].Sign_in_now : lang[selectedLang].Sign_up_now}
             </span>
           </p>
         </form>
@@ -209,8 +211,8 @@ export const Body = () => {
       {/* Footer */}
       <div className="bg-black text-white">
         <div className="lg:w-4/5 md:w-4/5 p-6 md:mx-auto lg:mx-auto">
-          <h1 className="text-2xl font-bold">Frequently Asked Questions</h1>
-          {freqdata.map((ele, index) => (
+          <h1 className="text-2xl font-bold">{ lang[selectedLang].Frequently_Asked_Questions}</h1>
+          {freqdata[selectedLang].map((ele, index) => (
             <FreqItem
               key={ele.title}
               ele={ele}

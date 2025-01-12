@@ -1,3 +1,12 @@
+export const SUPPORTED_LANGUAGES = [
+  { identifier: "en", name: "English" },
+  { identifier: "hindi", name: "Hindi" },
+  { identifier: "spanish", name: "Spanish" },
+  {identifier:"telugu" ,name: "Telugu"},
+  {identifier:"tamil",name:"Tamil"},
+  {identifier:"marathi",name:"Marathi"},
+  {identifier:"french",name:"French"}
+];
 
 export const API_OPTIONS = {
     method: 'GET',
@@ -8,4 +17,4 @@ export const API_OPTIONS = {
   };
 
 export const CARD_IMG = "https://image.tmdb.org/t/p/w500";
-  
+
