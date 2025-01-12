@@ -1,44 +1,65 @@
-import React from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { IoMdArrowDropdown } from "react-icons/io";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { auth } from "../../firebase";
-import {
-  signOut,
-} from "firebase/auth";
+import profilepix from "../assets/profilepix.png";
+import { signOut } from "firebase/auth";
 import { removeUser } from "../utils/UserSlice";
+import { toast } from "react-hot-toast";
+
 const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const user = useSelector(state =>state.user);
-   const handleSignOut = async () => {
-      try {
-        await signOut(auth);
-        dispatch(removeUser());
-        alert("You have been signed out.");
-        navigate('/');
-      } catch (error) {
-        alert(`Sign-out failed: ${error.message}`);
-      }
-    };
+  const user = useSelector((state) => state.user);
+  const [openList, setOpenList] = useState(false);
+
+  const mouseHandler = () => {
+    setOpenList(!openList);
+  };
+
+  const handleSignOut = async () => {
+    try {
+      await signOut(auth);
+      dispatch(removeUser());
+      toast.success("You have been signed out.");
+      navigate("/");
+    } catch (error) {
+      alert(`Sign-out failed: ${error.message}`);
+    }
+  };
 
   return (
-    <div className="absolute w-full bg-gradient-to-b from-black">
-      <div className="flex justify-center lg:justify-start"> {/* Responsive alignment */}
+    <div className={`absolute top-0 left-0 w-full flex z-50 ${user === null ? "bg-gradient-to-b from-black" : "bg-black"}`}>
+      <div className="flex justify-between w-full px-8">
         <img
-          className="w-48 lg:ml-[8rem]" // Margin left on large screens only
+          className="w-48"
           src="https://help.nflxext.com/helpcenter/OneTrust/oneTrust_production/consent/87b6a5c0-0104-4e96-a291-092c11350111/01938dc4-59b3-7bbc-b635-c4131030e85f/logos/dd6b162f-1a32-456a-9cfe-897231c7763c/4345ea78-053c-46d2-b11e-09adaef973dc/Netflix_Logo_PMS.png"
           alt="Netflix Logo"
         />
       </div>
-     {
-      user &&
-      <div>
-        <p>{user.displayName}</p>
-        <button onClick={handleSignOut}>Logout</button>
-      </div>
-     }
+
+      {user && (
+        <div className="flex items-center mr-4">
+          <div className="flex cursor-pointer">
+            <img className="rounded w-[40px] h-[40px]" src={profilepix} alt="" />
+            <IoMdArrowDropdown color="white" onMouseOver={mouseHandler} size={28} />
+          </div>
+
+          {openList && (
+            <div className="absolute top-[70px] right-12 bg-white border shadow-lg rounded-md">
+              <p className="px-4 py-2 text-gray-800 font-medium hover:bg-gray-100">{user.displayName}</p>
+              <hr className="my-2" />
+              <button className="px-4 py-2 text-red-600 font-medium hover:bg-red-50" onClick={handleSignOut}>
+                Logout
+              </button>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };
 
 export default Header;
+

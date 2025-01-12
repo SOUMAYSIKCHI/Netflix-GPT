@@ -28,7 +28,6 @@ export const Body = () => {
   useEffect(()=>{
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        // User is signed in, see docs for a list of available properties
         const {uid,email,displayName}= user;
         dispatch(addUser({uid,email,displayName}));
         navigate(`/browse`);
@@ -37,6 +36,7 @@ export const Body = () => {
         // User is signed out
         // ...
         dispatch(removeUser());
+        navigate('/')
       }
     });
   },[])
@@ -90,7 +90,7 @@ export const Body = () => {
             const {uid,email,displayName}= user;
             dispatch(addUser({uid,email,displayName}));
             // Profile updated!
-            // ...
+    
 
           }).catch((error) => {
             // An error occurred
@@ -124,7 +124,7 @@ export const Body = () => {
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
-          toast.error("Wrong Credentials entered");
+          toast.error("Wrong Credentials entered",errorMessage);
         });
     }
   };
