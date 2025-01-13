@@ -15,6 +15,7 @@ import {
 } from "firebase/auth";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { BG_URL } from "../utils/Constants";
 
 export const Body = () => {
   const [signUp, setSignUp] = useState(false);
@@ -138,7 +139,7 @@ export const Body = () => {
       <div className="w-full">
         <img
           className="h-screen w-full object-cover"
-          src="https://assets.nflxext.com/ffe/siteui/vlv3/154a9550-ce07-4e28-819c-63185dd849f8/web/IN-en-20250106-TRIFECTA-perspective_27b02e7c-f668-4639-9e82-1a5485084b2a_large.jpg"
+          src={BG_URL}
           alt="Netflix Background"
         />
       </div>
@@ -162,27 +163,27 @@ export const Body = () => {
             />
           )}
           <input
-            className="mt-6 px-4 py-2 text-[20px] w-full rounded-sm bg-black opacity-90 border-2 border-gray-700"
+            className="mt-6 px-4 py-2  text-lg lg:text-xl md:text-xl w-full rounded-sm bg-black opacity-90 border-2 border-gray-700"
             type="email"
             name="email"
             ref={email}
             placeholder={lang[selectedLang].EmailPlaceholder}
           />
           <input
-            className="mt-6 px-4 py-2 text-[20px] w-full rounded-sm bg-black opacity-90 border-2 border-gray-700"
+            className="mt-6 px-4 py-2  text-lg lg:text-xl md:text-xl w-full rounded-sm bg-black opacity-90 border-2 border-gray-700"
             type="password"
             name="password"
             ref={password}
             placeholder={lang[selectedLang].PasswordPlaceholder}
           />
 
-          <p className="mt-6 px-4 py-2 text-[20px] text-red-500">
+          <p className="mt-6 px-4 py-2  text-lg lg:text-xl md:text-xl text-red-500">
             {validatestmt}
           </p>
 
           <button
             type="submit"
-            className="mt-6 px-4 py-2 text-[20px] w-full rounded-md bg-red-700 opacity-100"
+            className="mt-6 px-4 py-2  text-lg lg:text-xl md:text-xl w-full rounded-md bg-red-700 opacity-100"
           >
             {signUp ? lang[selectedLang].SignUp : lang[selectedLang].SignIn}
           </button>
@@ -191,14 +192,14 @@ export const Body = () => {
           <button
             type="button"
             onClick={handleSignIn}
-            className="mt-4 px-2 py-2 text-[20px] w-full rounded-md border-white border-2 text-white"
+            className="mt-4 px-2 py-2  text-lg lg:text-xl md:text-xl w-full rounded-md border-white border-2 text-white"
           >
             { lang[selectedLang].SignInwithGoogle}
           </button>
 
           <p
             onClick={() => setSignUp(!signUp)}
-            className="mt-6 text-xl font-bold cursor-pointer"
+            className="mt-6 text-lg lg:text-xl md:text-xl  font-bold cursor-pointer"
           >
             {signUp ? lang[selectedLang].Already_have_an_Account : lang[selectedLang].New_to_Netflix}{" "}
             <span className="text-red-800">
@@ -210,8 +211,8 @@ export const Body = () => {
 
       {/* Footer */}
       <div className="bg-black text-white">
-        <div className="lg:w-4/5 md:w-4/5 p-6 md:mx-auto lg:mx-auto">
-          <h1 className="text-2xl font-bold">{ lang[selectedLang].Frequently_Asked_Questions}</h1>
+        <div className="lg:w-4/5 md:w-4/5 p-6  md:mx-auto lg:mx-auto">
+          <h1 className=" text-xl lg:text-2xl md:text-2xl font-bold">{ lang[selectedLang].Frequently_Asked_Questions}</h1>
           {freqdata[selectedLang].map((ele, index) => (
             <FreqItem
               key={ele.title}

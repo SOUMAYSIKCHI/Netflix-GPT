@@ -5,7 +5,8 @@ import VideoContainer from "./VideoContainer";
 
 const MainContainer = () => {
   const movie = useSelector((state) => state?.movie?.nowPlayingMovies);
-  if(!movie) return;
+  if(!movie) return
+
 
   const updatedMovie = movie[0];
 

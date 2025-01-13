@@ -1,15 +1,10 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
+const API_KEY =  import.meta.env.VITE_GIPHY_API_KEY;
 
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyBw3MxFer0qOJdW1rWRWQXxcKR763HRx4g",
+  apiKey: API_KEY,
   authDomain: "netflix-gpt-981a3.firebaseapp.com",
   projectId: "netflix-gpt-981a3",
   storageBucket: "netflix-gpt-981a3.firebasestorage.app",
@@ -18,7 +13,6 @@ const firebaseConfig = {
   measurementId: "G-G2ZZT75VMM"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();

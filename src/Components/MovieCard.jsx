@@ -2,6 +2,8 @@ import React from 'react';
 import { CARD_IMG } from '../utils/Constants';
 
 const MovieCard = ({ imgurl }) => {
+  if(!imgurl) return;
+
   return (
     <div className="h-48 w-32 flex-shrink-0 mx-2 mb-8">
       <img

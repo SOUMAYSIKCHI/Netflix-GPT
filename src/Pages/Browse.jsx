@@ -3,9 +3,12 @@ import Header from '../Components/Header'
 import useNowPlayingMovies from '../CustomHooks/useNowPlayingMovies'
 import MainContainer from '../Components/MainContainer';
 import SecondaryContainer from '../Components/SecondaryContainer';
+import { useSelector } from 'react-redux';
+import GptSearch from "../Components/GptSearch"
 
 const Browse = () => {
   useNowPlayingMovies();
+  const GptSlice = useSelector((state)=> state.GptSlice.showGptSearch);
  
   return (
     <div>
@@ -17,8 +20,15 @@ const Browse = () => {
           -Secondary Component
 
         */}
-        <MainContainer/>
+        {GptSlice? (<>
+        <GptSearch/>
+        </>):(<>
+         <MainContainer/>
         <SecondaryContainer/>
+        </>)
+        
+      }
+
         
     </div>
   )

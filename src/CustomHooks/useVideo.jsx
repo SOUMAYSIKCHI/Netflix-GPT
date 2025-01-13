@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react'
 import { API_OPTIONS } from '../utils/Constants'
-import { useDispatch } from 'react-redux'
+import { useDispatch,useSelector} from 'react-redux'
 import { addTrailerVideo } from '../utils/MovieSlice';
 
 const useVideo = (id) => {
     const dispatch = useDispatch();
-
+    const isPresent = useSelector((state)=>state.movie.trailerVideo)
     const fetchVideo = async function(){
         const res = await fetch(`https://api.themoviedb.org/3/movie/${id}/videos`,API_OPTIONS);
         const op = await res.json();
@@ -17,7 +17,7 @@ const useVideo = (id) => {
     }
 
     useEffect(()=>{
-        fetchVideo();
+      !isPresent&&  fetchVideo();
     },[])
 }
 

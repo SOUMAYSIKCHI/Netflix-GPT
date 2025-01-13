@@ -7,24 +7,32 @@ import profilepix from "../assets/profilepix.png";
 import { signOut } from "firebase/auth";
 import { removeUser } from "../utils/UserSlice";
 import { toast } from "react-hot-toast";
-import { SUPPORTED_LANGUAGES } from "../utils/Constants";
+import { NETFLIX_LOGO, SUPPORTED_LANGUAGES } from "../utils/Constants";
 import { chooseLang } from "../utils/ConfigSlice";
-
+import { toggleGptSearchView,removeGptResponse } from "../utils/GptSlice";
 const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
+  const isGpt = useSelector((state) => state.GptSlice.showGptSearch);
   const [openList, setOpenList] = useState(false);
+  
 
-  const selectHandler = (e) =>{
+  const selectHandler = (e) => {
     dispatch(chooseLang(e.target.value));
-    console.log(e.target.value);
-  }
-
+  };
 
   const mouseHandler = () => {
     setOpenList(!openList);
   };
+
+  const gptSearchHandler = ()=>{
+    if(isGpt){
+      navigate('/browse');
+      dispatch(removeGptResponse());
+    }
+    dispatch(toggleGptSearchView());
+  }
 
   const handleSignOut = async () => {
     try {
@@ -44,21 +52,17 @@ const Header = () => {
       }`}
     >
       <div className="flex justify-between w-full px-8">
-        <img
-          className="w-48"
-          src="https://help.nflxext.com/helpcenter/OneTrust/oneTrust_production/consent/87b6a5c0-0104-4e96-a291-092c11350111/01938dc4-59b3-7bbc-b635-c4131030e85f/logos/dd6b162f-1a32-456a-9cfe-897231c7763c/4345ea78-053c-46d2-b11e-09adaef973dc/Netflix_Logo_PMS.png"
-          alt="Netflix Logo"
-        />
+        <img className="w-48" src={NETFLIX_LOGO} alt="Netflix Logo" />
         <div className="mt-[22px]">
           <select
-            className="py-2 px-4 rounded-lg text-white font-semibold bg-red-800 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 shadow-lg"
+            className="py-2 px-4 rounded-lg text-white  font-semibold bg-red-800 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 shadow-lg"
             name="config"
             id="config"
             onChange={selectHandler}
           >
             {SUPPORTED_LANGUAGES.map((ele) => (
               <option
-                className="text-black bg-white hover:bg-red-100 font-medium"
+                className="text-black  text-sm lg:text-xl md:text-xl bg-white hover:bg-red-100 font-medium"
                 value={ele.identifier}
                 key={ele.identifier}
               >
@@ -66,8 +70,21 @@ const Header = () => {
               </option>
             ))}
           </select>
+          {/* Is user is signed in show this button : */}
+          {
+            user &&(
+              <button onClick={gptSearchHandler} className="text-white ml-4 bg-purple-700 px-4 py-2 rounded-md">{isGpt?"Home Page":"Gpt Search"}</button>
+
+            )
+          }
+
         </div>
+
+
+
       </div>
+
+      {/* Is user is signed in show this : */}
 
       {user && (
         <div className="flex items-center mr-4">
