@@ -23,12 +23,12 @@ const GptSearchBar = () => {
             type="text"
             value={inputValue}
             onChange={handleInputChange}
-            className="p-4 m-4 col-span-9"
+            className="p-4 m-2 lg:m-4  lg:col-span-9 col-span-8"
             placeholder={lang[selectedLang].gptSearchPlaceholder}
           />
           <button
             type="submit"
-            className="col-span-3 m-4 py-2 px-4 bg-red-700 text-white rounded-lg"
+            className="  lg:col-span-3 col-span-4 m-4 py-2 px-4 bg-red-700 text-white rounded-lg"
           >
             {lang[selectedLang].search}
           </button>
