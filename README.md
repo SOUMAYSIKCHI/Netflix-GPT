@@ -69,15 +69,6 @@ A movie recommendation app powered by **GPT-3.5 Turbo** integration! 🚀
   - Display suggestions from **TMDB API**.
   - Reuse Movie List component for suggestions.
 
-
----
-
-## Future Enhancements
-- Add user reviews and ratings for movies.
-- Integrate social login (Google, Facebook, etc.).
-- Advanced filtering and sorting options for movies.
-- Implement dark mode.
-
 ---
 
 Enjoy exploring **NetflixGPT**! 🎬
